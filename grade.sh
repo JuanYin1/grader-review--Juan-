@@ -20,7 +20,7 @@ javac -cp $CPATH *.java
 if [[ $? -eq 0 ]]
 then 
 echo "compile the files successfully"
-# grep --color compile the files successfully
+
 
 else
 echo "can not compile the files"
@@ -29,7 +29,9 @@ fi
  
 
 java -cp .:../lib/hamcrest-core-1.3.jar:../lib/junit-4.13.2.jar org.junit.runner.JUnitCore TestListExamples > grade.txt
+grep "There was" grade.txt
 grep --color "FAILURES!!!" grade.txt
+grep --color "OK" grade.txt
 
 echo 'Finished cloning'
 cd ..
