@@ -5,34 +5,41 @@ git clone $1 student-submission
 
 if [[ -f student-submission/ListExamples.java ]]
 then
-echo "Found the student submission file."
-# grep --color Found the student submission file.
-cd student-submission
-cp ../TestListExamples.java ./
+    echo "Found the student submission file."
+    # grep --color Found the student submission file.
+    cd student-submission
+    cp ../TestListExamples.java ./
 
 else
-echo "Did not found the student submission file"
-exit 1
+    echo "Did not found the student submission file"
+    exit 1
 fi
 
+grep -q "static List<String> filter(List<String> s, StringChecker sc)" ListExamples.java
+if [[ $? -ne 0 ]]
+then 
+    echo "Missing filter method signature"
+    exit 1
+fi
+
+grep -q "static List<String> merge(List<String> list1, List<String> list2)" ListExamples.java
+if [[ $? -ne 0 ]]
+then
+    echo "Missing merge method signature"
+    exit 1
+fi
 
 javac -cp $CPATH *.java
 if [[ $? -eq 0 ]]
 then 
-echo "compile the files successfully"
-
-
+    echo "compile the files successfully"
 else
-echo "can not compile the files"
-
+    echo "can not compile the files"
+    exit 1
 fi
  
 
-java -cp .:../lib/hamcrest-core-1.3.jar:../lib/junit-4.13.2.jar org.junit.runner.JUnitCore TestListExamples > grade.txt
+java -cp $CPATH org.junit.runner.JUnitCore TestListExamples > grade.txt
 grep "There was" grade.txt
 grep --color "FAILURES!!!" grade.txt
 grep --color "OK" grade.txt
-
-echo 'Finished cloning'
-cd ..
-java GradeServer 9999 > web.txt
