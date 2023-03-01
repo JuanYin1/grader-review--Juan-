@@ -15,6 +15,19 @@ else
     exit 1
 fi
 
+grep -q "static List<String> filter(List<String> s, StringChecker sc)" ListExamples.java
+if [[ $? -ne 0 ]]
+then 
+    echo "Missing filter method signature"
+    exit 1
+fi
+
+grep -q "static List<String> merge(List<String> list1, List<String> list2)" ListExamples.java
+if [[ $? -ne 0 ]]
+then
+    echo "Missing merge method signature"
+    exit 1
+fi
 
 javac -cp $CPATH *.java
 if [[ $? -eq 0 ]]
